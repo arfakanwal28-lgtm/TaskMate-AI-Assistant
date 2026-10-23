@@ -1,0 +1,34 @@
+{% extends "base.html" %}{% set page_breadcrumb = "Dashboard" %}{% block content %}
+<header class="page-heading dashboard-heading">
+  <div><small class="eyebrow">YOUR DAY, ORGANISED</small><h1>Good morning, Arfa! <span class="sparkle">✦</span></h1>
+  <p class="muted">Let’s organise your day and stay productive.</p></div>
+  <form class="top-search" action="{{ url_for('tasks_page') }}"><input name="search" placeholder="Search tasks..."><button aria-label="Search">⌕</button></form>
+</header>
+<a class="primary-button heading-button" href="{{ url_for('add_task') }}">＋ Add New Task</a>
+<div class="stats">
+  <div class="stat blue"><div class="stat-icon">▣</div><span class="stat-label">Total Tasks</span><strong>{{ total }}</strong><small>All tasks</small></div>
+  <div class="stat green"><div class="stat-icon">◷</div><span class="stat-label">Pending</span><strong>{{ pending }}</strong><small>To complete</small></div>
+  <div class="stat red"><div class="stat-icon">✓</div><span class="stat-label">Completed</span><strong>{{ completed }}</strong><small>Finished tasks</small></div>
+</div>
+<div class="dashboard-grid">
+  <section class="panel today-panel">
+    <div class="panel-title"><div><h2>Today's Tasks</h2><p class="muted">Your next steps, all in one place.</p></div><a href="{{ url_for('tasks_page') }}">View all →</a></div>
+    {% if tasks %}
+      {% for task in tasks %}
+      <div class="today-task">
+        <form method="post" action="{{ url_for('complete_task', task_id=task.id) }}"><button class="check {% if task.completed %}checked{% endif %}" title="Mark complete">{% if task.completed %}✓{% endif %}</button></form>
+        <div class="today-task-text"><strong class="{% if task.completed %}strike{% endif %}">{{ task.title }}</strong><small>{{ task.category }}{% if task.due_date %} · Due {{ task.due_date }}{% endif %}</small></div>
+        <span class="priority {{ task.priority|lower }}">{{ task.priority }}</span>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state"><span class="empty-icon">☷</span><strong>No tasks yet</strong><p>Add your first task and start organising your day.</p><a class="primary-button" href="{{ url_for('add_task') }}">＋ Add a task</a></div>
+    {% endif %}
+  </section>
+  <div class="right-column">
+    <section class="panel suggestion-panel"><div class="panel-title"><h2>✧ AI Suggestion for you</h2></div>
+      <p>Start with your highest-priority task to organise your day.</p><a class="primary-button full-button" href="{{ url_for('assistant') }}">View Suggestions</a></section>
+    <section class="panel progress-panel"><h2>Task Progress</h2><p><strong>{{ completed }}</strong> of {{ total }} tasks completed</p><div class="progress-track"><div style="width:{{ (completed / total * 100) if total else 0 }}%"></div></div></section>
+  </div>
+</div>
+{% endblock %}

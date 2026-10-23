@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% set page_breadcrumb = "My Tasks" %}{% block content %}
+<header class="page-heading"><div><small class="eyebrow">YOUR PERSONAL WORKSPACE</small><h1>My Tasks</h1><p class="muted">Manage your daily activities in one place.</p></div><a class="primary-button" href="{{ url_for('add_task') }}">＋ Add New Task</a></header>
+<div class="stats compact-stats">
+  <div class="stat blue"><div class="stat-icon">▤</div><span class="stat-label">Total Tasks</span><strong>{{ total }}</strong></div>
+  <div class="stat green"><div class="stat-icon">◷</div><span class="stat-label">Pending</span><strong>{{ pending }}</strong></div>
+  <div class="stat red"><div class="stat-icon">✓</div><span class="stat-label">Completed</span><strong>{{ completed }}</strong></div>
+</div>
+<section class="panel task-list-panel">
+  <form class="search-form" action="{{ url_for('tasks_page') }}"><input name="search" value="{{ search }}" placeholder="⌕  Search tasks or categories..."><button class="primary-button">Search</button></form>
+  <div class="panel-title"><div><h2>All tasks <span class="count">{{ tasks|length }}</span></h2><p class="muted">Ordered by status, priority and due date.</p></div></div>
+  {% for task in tasks %}
+  <article class="task-row">
+    <form method="post" action="{{ url_for('complete_task', task_id=task.id) }}"><button class="check {% if task.completed %}checked{% endif %}" title="Mark complete">{% if task.completed %}✓{% endif %}</button></form>
+    <div class="task-info"><h3 class="{% if task.completed %}strike{% endif %}">{{ task.title }}</h3><p>{{ task.description or "No description added." }}</p><small>{{ task.category }}{% if task.due_date %} · Due {{ task.due_date }}{% endif %}</small></div>
+    <span class="priority {{ task.priority|lower }}">{{ task.priority }}</span>
+    <div class="task-actions"><a href="{{ url_for('edit_task', task_id=task.id) }}" title="Edit task">✎</a><form method="post" action="{{ url_for('delete_task', task_id=task.id) }}" onsubmit="return confirm('Delete this task?')"><button title="Delete task">♲</button></form></div>
+  </article>
+  {% else %}<div class="empty-state"><span class="empty-icon">☷</span><strong>No tasks found</strong><p>{% if search %}Try another search, or{% else %}Add your first task to get started.{% endif %}</p><a class="primary-button" href="{{ url_for('add_task') }}">＋ Add a task</a></div>{% endfor %}
+</section>
+{% endblock %}

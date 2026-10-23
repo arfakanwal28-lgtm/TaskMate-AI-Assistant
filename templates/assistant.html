@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% set page_breadcrumb = "AI Assistant" %}{% block content %}
+<header class="page-heading"><div><small class="eyebrow">YOUR PRODUCTIVITY COMPANION</small><h1>AI Assistant <span class="sparkle">✧</span></h1><p class="muted">Get practical, task-aware suggestions for your day.</p></div></header>
+<div class="assistant-grid">
+  <section class="panel assistant-main"><div class="assistant-brand"><span class="assistant-icon">✧</span><div><h2>TaskMate Assistant</h2><p>• Ready to help you plan</p></div><span class="beta">BETA</span></div>
+    <div class="chat-message"><span class="assistant-icon small">✧</span><div><strong>Hello! I'm your daily planning assistant.</strong><p>I can help you review your tasks, choose what to focus on, and build a manageable plan.</p><div class="chips"><span>Task suggestions</span><span>Productivity tips</span><span>Study planning</span></div></div></div>
+    <div class="chat-message user-message"><div><strong>✦ Let's make a plan for today</strong><p>Here are some suggestions based on the tasks in your planner.</p></div></div>
+    {% for suggestion in suggestions %}<div class="recommendation"><span>✦</span><p>{{ suggestion }}</p></div>{% endfor %}
+    <a class="primary-button" href="{{ url_for('add_task') }}">＋ Add a task</a>
+  </section>
+  <aside class="panel snapshot"><h2>Your task snapshot</h2><p class="muted">A quick view of your workload.</p><strong class="snapshot-number">{{ tasks|length }}</strong><p>Total tasks</p><div class="snapshot-line"><span>• Pending</span><strong>{{ pending|length }}</strong></div><div class="snapshot-line"><span>• Completed</span><strong>{{ tasks|length - pending|length }}</strong></div><div class="tip-box">✧ <strong>Productivity tip</strong><p>Keep your plan realistic. Focus on one task at a time and take short breaks.</p></div></aside>
+</div>
+{% endblock %}

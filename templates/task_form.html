@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% set page_breadcrumb = page_title %}{% block content %}
+<header class="page-heading"><div><small class="eyebrow">PLAN YOUR NEXT STEP</small><h1>{{ page_title }}</h1><p class="muted">Manage your daily activities in one place.</p></div></header>
+<section class="panel form-panel">
+  <form method="post">
+    <label for="title">Task Title <span>*</span></label>
+    <input id="title" name="title" required maxlength="120" placeholder="Enter task title..." value="{{ task.title if task else '' }}">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="3" placeholder="Describe your task...">{{ task.description if task else '' }}</textarea>
+    <div class="form-grid">
+      <div><label for="due_date">Due Date</label><input id="due_date" type="date" name="due_date" value="{{ task.due_date if task else '' }}"></div>
+      <div><label for="category">Category</label><select id="category" name="category">
+        {% for cat in ['Study','Work','Personal','Health','Other'] %}<option value="{{ cat }}" {% if task and task.category == cat %}selected{% endif %}>{{ cat }}</option>{% endfor %}
+      </select></div>
+    </div>
+    <label>Priority</label><div class="priority-options">
+      {% for level in ['High','Medium','Low'] %}<label class="priority-choice"><input type="radio" name="priority" value="{{ level }}" {% if (task and task.priority == level) or (not task and level == 'Medium') %}checked{% endif %}><span>{{ level }}</span></label>{% endfor %}
+    </div>
+    <div class="form-actions"><button class="primary-button" type="submit">＋ Save Task</button><a class="secondary-button" href="{{ url_for('tasks_page') }}">Cancel</a></div>
+  </form>
+</section>
+{% endblock %}
